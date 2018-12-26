@@ -1,5 +1,5 @@
 import logging
-from flask import Flask
+from flask import Flask, request
 
 logging.basicConfig(level=logging.INFO)
 app = Flask(__name__)
@@ -12,7 +12,10 @@ employeeID = random.randint(100, 999)
 @app.route('/resign')
 def resign():
     logging.info("  I(employeeID:{0}) have resigned".format(employeeID))
-    exit(0)
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
 
 @app.route('/whatdoyoudo')
 def whatdoyoudo():
